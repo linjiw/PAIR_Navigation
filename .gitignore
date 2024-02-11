@@ -5,3 +5,7 @@ __pycache__
 wandb
 runs
 outputs/
+image_folder/
+sampled_images/
+saved_models/
+rvae_logs/
