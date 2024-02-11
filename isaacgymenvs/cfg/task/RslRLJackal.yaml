@@ -1,0 +1,75 @@
+# used to create the object
+name: RslRLJackal
+
+physics_engine: 'physx'
+
+env:
+  numEnvs: ${resolve_default:4096,${...num_envs}}
+  numObservations: 724
+  numActions: 2
+  envSpacing: 5.  # [m]
+  enableDebugVis: False
+  enableCameraSensors: True
+
+  terrain: # BARN environments
+    world_path: "urdf/jackal/worlds"
+    staticFriction: 0.5
+    dynamicFriction: 0.5  # it depends on the lower frictions amoung two contacted surfaces
+    restitution: 0  # non-elastic
+
+  baseInitState:
+    pos: [2.25, 2.25, 0] # x,y,z [m]
+    rot: 90 # angle rotation around z-axis
+    goal: [2.25, 10.25, 0]
+
+  control:
+    # PD Drive parameters:
+    stiffness: 1000. #80.0  # [N*m/rad]
+    damping: 200.    # [N*m*s/rad]
+    # action scale: target angle = actionScale * action + defaultAngle
+    actionScale: 1
+    # decimation: Number of control action updates @ sim DT per policy DT
+    decimation: 20
+    multiplier: [3.0, 3.0]  # range from which to uniformly sample the multiplier
+
+  camera:
+    width: 240
+    height: 240
+    horizontal_fov: 90
+
+  urdfAsset:
+    file: "urdf/jackal/urdf/jackal.urdf"
+
+  learn:
+    # episode length in seconds
+    episodeLength_s: 40
+    success_reward: 20.
+    collision_reward: -0.
+    progress_reward: 1.
+
+  # viewer cam:
+  viewer:
+    refEnv: 0
+    pos: [0, 0, 10]  # [m]
+    lookat: [1., 1, 9]  # [m]
+
+sim:
+  dt: 0.005
+  substeps: 1
+  up_axis: "z"
+  use_gpu_pipeline: ${eq:${...pipeline},"gpu"}
+  gravity: [0.0, 0.0, -9.81]
+  physx:
+    num_threads: ${....num_threads}
+    solver_type: ${....solver_type}
+    use_gpu: ${contains:"cuda",${....sim_device}} # set to False to run on CPU
+    num_position_iterations: 4
+    num_velocity_iterations: 1
+    contact_offset: 0.002
+    rest_offset: 0.0
+    bounce_threshold_velocity: 0.2
+    max_depenetration_velocity: 100.0
+    default_buffer_size_multiplier: 5.0
+    max_gpu_contact_pairs: 8388608 # 8*1024*1024
+    num_subscenes: ${....num_subscenes}
+    contact_collection: 1 # 0: CC_NEVER (don't collect contact info), 1: CC_LAST_SUBSTEP (collect only contacts on last substep), 2: CC_ALL_SUBSTEPS (default - all contacts)
