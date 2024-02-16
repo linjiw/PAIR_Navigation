@@ -2,8 +2,8 @@ params:
   seed: ${...seed}
 
   algo:
-    name: a2c_continuous
-    # name: PAIR_Agent
+    # name: a2c_continuous
+    name: PAIR_Agent
 
   model:
     name: continuous_a2c_logstd
@@ -58,7 +58,7 @@ params:
     schedule_type: legacy
     kl_threshold: 0.008
     score_to_win: 20000
-    max_epochs: 10000 #${resolve_default:500,${....max_iterations}}
+    max_epochs: 1 #${resolve_default:500,${....max_iterations}}
     save_best_after: 0
     save_frequency: 100
     grad_norm: 1.0

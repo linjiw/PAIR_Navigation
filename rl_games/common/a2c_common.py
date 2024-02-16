@@ -1575,7 +1575,7 @@ class ContinuousA2CBase(A2CBase):
                 dist.broadcast(should_exit_t, 0)
                 should_exit = should_exit_t.float().item()
             if should_exit:
-                return self.last_mean_rewards, epoch_num
+                return self.current_rewards, self.last_mean_rewards, epoch_num
 
             if should_exit:
-                return self.last_mean_rewards, epoch_num
+                return self.current_rewards, self.last_mean_rewards, epoch_num

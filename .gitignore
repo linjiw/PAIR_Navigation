@@ -9,3 +9,12 @@ image_folder/
 sampled_images/
 saved_models/
 rvae_logs/
+VAE/*.png
+VAE/*.pt
+VAE/binary_images/*.npy
+grid_files/
+path_files/
+VAE/dataset/test/*.npy
+VAE/dataset/train/*.npy
+VAE/generated_images/
+

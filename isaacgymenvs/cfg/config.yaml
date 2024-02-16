@@ -33,10 +33,10 @@ num_subscenes: 4 # Splits the simulation into N physics scenes and runs each one
 
 # RLGames Arguments
 # test - if set, run policy in inference mode (requires setting checkpoint to load)
-test: True
+test: False
 # used to set checkpoint path
-# checkpoint: ''
-checkpoint: '/home/linjiw/Documents/isaacgym_original/isaacgymenvs/outputs/2024-02-08/20-12-38/runs/Jackal/nn/Jackal.pth'
+checkpoint: ''
+# checkpoint: '/home/linjiw/Documents/isaacgym_original/isaacgymenvs/outputs/2024-02-08/20-12-38/runs/Jackal/nn/Jackal.pth'
 # checkpoint: '/home/linjiw/Documents/isaacgym_original/isaacgymenvs/outputs/2024-02-08/20-12-38/runs/Jackal/nn/last_Jackal_ep_2300_rew_21.13775.pth'
 # checkpoint: '/home/linjiw/Downloads/newisaac/isaacgym-jackal_original/isaacgymenvs/outputs/2024-02-02/15-25-12/runs/Jackal/nn/Jackal.pth'
 # checkpoint: '/home/linjiw/Downloads/newisaac/isaacgym-jackal/isaacgymenvs/outputs/2024-01-25/17-24-34/runs/Jackal/nn/last_Jackal_ep_4000_rew_26.76752.pth'
@@ -61,7 +61,7 @@ capture_video_len: 100
 force_render: True
 
 # disables rendering
-headless: True
+headless: False
 
 # set default task and default training config based on task
 defaults:

@@ -31,7 +31,7 @@ from dcgan.algos import PPO, RolloutStorage, ACAgent
 
 from dcgan.init_agent import make_agent, train, AdversarialAgentTrainer, make_barn_agent
 
-from dcgan.models import MultigridNetworkTaskEmbedSingleStepContinuous, GridEnvironment, ActorCritic, BARN_ENV
+from dcgan.models import MultigridNetworkTaskEmbedSingleStepContinuous, GridEnvironment, ActorCritic, BARN_ENV, VAE_ENV
 
 
 def make_agent_env_barn(args):
@@ -49,10 +49,10 @@ def make_agent_env(args):
     adversary_randomz_obs_space = gym.spaces.Box(low=0, high=1.0, shape=(random_z_dim,), dtype=np.float32)
     adversary_observation_space = gym.spaces.Dict({'random_z': adversary_randomz_obs_space})
 
-    latent_dim = 100
+    latent_dim = args.latent_dim
     action_shape = (latent_dim,)
-    latent_dim_min = -3
-    latent_dim_max = 3
+    latent_dim_min = 0
+    latent_dim_max = 1
     adversary_action_space = gym.spaces.Box(low=latent_dim_min, high=latent_dim_max, shape=action_shape, dtype='float32')
 
     adversary_network = MultigridNetworkTaskEmbedSingleStepContinuous(
@@ -61,7 +61,8 @@ def make_agent_env(args):
         scalar_fc=10
     )
     # adversary_network = MultigridNetworkTaskEmbedSingleStepContinuous(...)  # Initialize with appropriate arguments
-    env = GridEnvironment()
+    # env = GridEnvironment()
+    env = VAE_ENV()
     # final_observation = rollout(adversary_network, env, 10)
 
     # agent = ACAgent(adversary_network, 10, 10)

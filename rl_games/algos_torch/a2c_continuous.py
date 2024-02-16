@@ -4,6 +4,7 @@ from rl_games.algos_torch import torch_ext
 from rl_games.algos_torch import central_value
 from rl_games.common import common_losses
 from rl_games.common import datasets
+from rl_games.algos_torch.players import PpoPlayerContinuous
 
 from torch import optim
 import torch 

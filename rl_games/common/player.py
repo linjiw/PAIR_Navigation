@@ -7,7 +7,7 @@ from rl_games.common import env_configurations
 from rl_games.algos_torch import  model_builder
 
 class BasePlayer(object):
-    def __init__(self, params):
+    def __init__(self, params, created_env = None):
         self.config = config = params['config']
         self.load_networks(params)
         self.env_name = self.config['env_name']
@@ -19,7 +19,15 @@ class BasePlayer(object):
             self.env = self.create_env()
             self.env_info = env_configurations.get_env_info(self.env)
         else:
-            self.env = config.get('vec_env')
+            if created_env is None:
+                # self.env = self.create_env()
+                print('[BasePlayer] Using provided env: ', self.env_name)
+                self.env = created_env
+                # self.env_info = env_configurations.get_env_info(self.env)
+                self.env_info = self.env.get_env_info()
+            else:
+
+                self.env = config.get('vec_env')
         self.value_size = self.env_info.get('value_size', 1)
         self.action_space = self.env_info['action_space']
         self.num_agents = self.env_info['agents']

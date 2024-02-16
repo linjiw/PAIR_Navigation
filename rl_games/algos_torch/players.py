@@ -16,8 +16,10 @@ def rescale_actions(low, high, action):
 
 
 class PpoPlayerContinuous(BasePlayer):
-    def __init__(self, params):
-        BasePlayer.__init__(self, params)
+    # def __init__(self, params):
+    #     BasePlayer.__init__(self, params)
+    def __init__(self, params, created_env = None):
+        BasePlayer.__init__(self, params, created_env)
         self.network = self.config['network']
         self.actions_num = self.action_space.shape[0] 
         self.actions_low = torch.from_numpy(self.action_space.low.copy()).float().to(self.device)

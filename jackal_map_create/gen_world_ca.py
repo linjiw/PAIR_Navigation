@@ -7,6 +7,9 @@ import matplotlib.pyplot as plt
 import tkinter as tk
 import numpy as np
 import os
+import sys
+sys.path.append("/home/linjiw/Downloads/newisaac/isaacgym-jackal/")
+sys.path.insert(0, './..')
 from jackal_map_create.world_writer import WorldWriter
 from jackal_map_create.difficulty_quant import DifficultyMetrics
 from jackal_map_create.pgm_writer import PGMWriter
@@ -717,5 +720,9 @@ def gen_barn_world(iteration=0, seed=0, smooth_iter=4, fill_pct=.27, rows=30, co
     return main(iteration=iteration, seed=seed, fill_pct=fill_pct, smooth_iter=smooth_iter, show_metrics=show_metrics, folder_name=folder_name)
 
 if __name__ == "__main__":
-	main(iteration=-1, seed=0, fill_pct=0.2, smooth_iter=4)
+	# main(iteration=-1, seed=0, fill_pct=0.2, smooth_iter=4)
+	for i in range(0, 30):
+		fill_pct = i * 0.01
+		for _ in range(30):
+			gen_barn_world(iteration=-1, seed=0, fill_pct=fill_pct, smooth_iter=4, show_metrics=1)
 

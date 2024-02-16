@@ -21,11 +21,13 @@ import os
 from torchvision.transforms import Resize
 from torchvision.transforms.functional import to_pil_image, to_tensor
 from torch.distributions import MultivariateNormal
-from jackal_map_create.gen_world_ca import gen_barn_world
+# from jackal_map_create.gen_world_ca import gen_barn_world
 import wandb
 from dcgan.dcgan import Generator
 from dcgan.distributions import Categorical  
 from dcgan.common import *
+from dcgan.VAE.model import VAE, Encoder, Decoder
+from dcgan.VAE.sample import load_model, generate_images, sample_and_save_binary_images
 # from algo import PPO
 # from algo.storage import RolloutStorage
 # from algo.agent import ACAgent
@@ -592,8 +594,8 @@ class MultigridNetworkTaskEmbedSingleStepContinuous(DeviceAwareModule):
         # print(f"alpha: {alpha}")
         # print(f"beta: {beta}")
         dist = Beta(alpha, beta)
-        mean = dist.mean
-        std = dist.variance ** 0.5
+        # mean = dist.mean
+        # std = dist.variance ** 0.5
         # print(f"mean: {mean}")
         # print(f"std: {std}")
         action = dist.sample()
@@ -644,6 +646,9 @@ def print_image_as_dots(image_array):
             print('●' if pixel == 1 else ' ', end='')
         print()  # Newline after each row
  
+def vae_sample(generator, action_vector, folder_name, episode, idx, img_shape):
+    pass
+
 def sample(generator, action_vector, folder_name, episode, idx, img_shape):
     cuda = torch.cuda.is_available()
     
@@ -785,7 +790,122 @@ class TestMultigridNetwork(unittest.TestCase):
 
         plt.savefig(os.path.join(output_dir, f'test_{test_id}_plot.png'))
         plt.close()
-        
+
+
+class VAE_ENV:
+    def __init__(self):
+        # Initialize Generator
+        encoder_dim = 50
+        # latent_dim = 100
+        self.latent_dim = 20
+
+        self.img_shape = (self.latent_dim,)
+        img_size = 32
+        channels = 1
+        # model_epoch = 1920
+        model_epoch = 9971
+        # self.generator = Generator(encoder_dim, latent_dim, img_size, channels)
+        # self.generator.load_state_dict(torch.load(f"./../dcgan/saved_models/official_generator_epoch_{model_epoch}.pt"))
+        # self.generator.eval()
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        model_path = '/home/linjiw/Documents/PAIR_Navigation/dcgan/VAE/vae_model.pth'
+        self.vae = load_model(model_path, self.latent_dim, self.device)
+        random_z_dim = 50
+        adversary_randomz_obs_space = gym.spaces.Box(low=0, high=1.0, shape=(random_z_dim,), dtype=np.float32)
+        self.adversary_observation_space = gym.spaces.Dict({'random_z': adversary_randomz_obs_space})
+        # latent_dim = 100
+        action_shape = (self.latent_dim,)
+        latent_dim_min = -3
+        latent_dim_max = 3
+        current_time = datetime.now()
+        self.sample_img = None
+        self.time_string = current_time.strftime("%m_%d_%Y_%H_%M_%S")
+        self.adversary_action_space = gym.spaces.Box(low=latent_dim_min, high=latent_dim_max, shape=action_shape, dtype='float32')
+        self.global_sample_count = 0
+        self.folder_name = './../assets/urdf/jackal'
+        # if torch.cuda.is_available():
+        #     self.generator.cuda()
+
+    # def reset(self):
+    #     # Generate random noise as observation
+    #     random_noise = torch.randn(1, 50)
+    #     return random_noise
+    def reset(self):
+        # Generate random noise as observation
+        random_noise = torch.randn(1, 50).to('cuda')
+        # Wrap the observation as a dictionary
+        obs_dict = {'random_z': random_noise}
+        return obs_dict
+    
+    def step(self, action, episode, step_id):
+        # Process the action with the generator
+
+        # Format the time string as "month_day_year_hour_min_sec"
+        # step_id = 'pair'
+        random_latent_vectors = action
+        sample_and_save_binary_images(self.vae, 1, random_latent_vectors, self.device)
+        # self.sample_img = sample(self.generator, action, self.folder_name, episode, str(step_id), self.img_shape)
+        self.global_sample_count += 1
+        reward = torch.randn(1)
+        done = True
+        info = {}
+        # print(f"globe_sample_count: {self.global_sample_count}")
+        return self.reset(), reward, done, info
+    
+ 
+
+class ClutrEnv:
+    def __init__(self):
+        # Initialize Generator
+        encoder_dim = 50
+        latent_dim = 100
+        self.img_shape = (latent_dim,)
+        img_size = 32
+        channels = 1
+        # model_epoch = 1920
+        # change to VAE and load
+        model_epoch = 9971
+        self.generator = Generator(encoder_dim, latent_dim, img_size, channels)
+        self.generator.load_state_dict(torch.load(f"./../dcgan/saved_models/official_generator_epoch_{model_epoch}.pt"))
+        self.generator.eval()
+        #-------------------------------
+        random_z_dim = 50
+        adversary_randomz_obs_space = gym.spaces.Box(low=0, high=1.0, shape=(random_z_dim,), dtype=np.float32)
+        self.adversary_observation_space = gym.spaces.Dict({'random_z': adversary_randomz_obs_space})
+        latent_dim = 100
+        action_shape = (latent_dim,)
+        latent_dim_min = -3
+        latent_dim_max = 3
+        current_time = datetime.now()
+        self.sample_img = None
+        self.time_string = current_time.strftime("%m_%d_%Y_%H_%M_%S")
+        self.adversary_action_space = gym.spaces.Box(low=latent_dim_min, high=latent_dim_max, shape=action_shape, dtype='float32')
+        self.global_sample_count = 0
+        self.folder_name = './../assets/urdf/jackal'
+        if torch.cuda.is_available():
+            self.generator.cuda()
+
+    def reset(self):
+        # Generate random noise as observation
+        random_noise = torch.randn(1, 50).to('cuda')
+        # Wrap the observation as a dictionary
+        obs_dict = {'random_z': random_noise}
+        return obs_dict
+    
+    def step(self, action, episode, step_id):
+        # Process the action with the generator
+
+        # Format the time string as "month_day_year_hour_min_sec"
+        # step_id = 'pair'
+        self.sample_img = sample(self.generator, action, self.folder_name, episode, str(step_id), self.img_shape)
+        self.global_sample_count += 1
+        reward = torch.randn(1)
+        done = True
+        info = {}
+        # print(f"globe_sample_count: {self.global_sample_count}")
+        return self.reset(), reward, done, info
+    
+     
         
 class GridEnvironment:
     def __init__(self):
@@ -840,7 +960,7 @@ class GridEnvironment:
         # print(f"globe_sample_count: {self.global_sample_count}")
         return self.reset(), reward, done, info
     
-    
+   
 def rollout(network, env, num_steps):
     observation = env.reset()
     for step in range(num_steps):
