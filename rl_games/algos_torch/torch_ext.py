@@ -82,9 +82,10 @@ def save_checkpoint(filename, state):
     try:
         loaded_state = safe_load(checkpoint_path)
         print(f"=> Successfully saved and verified checkpoint '{checkpoint_path}'")
+        return checkpoint_path
+
     except Exception as exc:
         raise RuntimeError(f'Failed to verify the saved file: {exc}')
-
 
 
 def load_checkpoint(filename):

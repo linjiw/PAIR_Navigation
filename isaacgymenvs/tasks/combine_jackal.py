@@ -396,7 +396,7 @@ class Jakcal(VecTask):
             self.gym.refresh_net_contact_force_tensor(self.sim)
 
             # check collision at every sim step rather than env step
-            collided_buf = torch.linalg.norm(self.contact_forces[self.jackal_rigid_body_idx][:, :3], dim=-1) > 0.005 # 0.01
+            collided_buf = torch.linalg.norm(self.contact_forces[self.jackal_rigid_body_idx][:, :3], dim=-1) > 0.01 # 0.01
             collided_buf = torch.logical_or(collided_buf, self.root_states[self.jackal_actor_idx][:, 2] > 0.15)
             self.collided_buf = torch.logical_or(collided_buf, self.collided_buf)
             self.collided_buf = torch.logical_and(self.collided_buf, self.progress_buf > 1)

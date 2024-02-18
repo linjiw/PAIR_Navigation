@@ -1546,7 +1546,11 @@ class ContinuousA2CBase(A2CBase):
                     checkpoint_name = self.config['name'] + '_ep_' + str(epoch_num) + '_rew_' + str(mean_rewards[0])
 
                     if self.save_freq > 0:
-                        if (epoch_num % self.save_freq == 0) and (mean_rewards[0] <= self.last_mean_rewards):
+                        if epoch_num_real % self.save_freq == 0:
+                            self.save(os.path.join(self.nn_dir, 'last_' + self.config['name'] + 'ep' + str(epoch_num_real) + 'rew' + str(mean_rewards)))
+
+
+                        if (epoch_num_real % self.save_freq == 0) and (mean_rewards[0] <= self.last_mean_rewards):
                             self.save(os.path.join(self.nn_dir, 'last_' + checkpoint_name))
 
                     if mean_rewards[0] > self.last_mean_rewards and epoch_num >= self.save_best_after:
@@ -1560,13 +1564,14 @@ class ContinuousA2CBase(A2CBase):
                                 self.save(os.path.join(self.nn_dir, checkpoint_name))
                                 should_exit = True
 
-                if epoch_num_real >= self.max_epochs:
+                if epoch_num >= self.max_epochs:
                     if self.game_rewards.current_size == 0:
                         print('WARNING: Max epochs reached before any env terminated at least once')
                         mean_rewards = -np.inf
-                    self.save(os.path.join(self.nn_dir, 'last_' + self.config['name'] + 'ep' + str(epoch_num) + 'rew' + str(mean_rewards)))
+                    # self.save(os.path.join(self.nn_dir, 'last_' + self.config['name'] + 'ep' + str(epoch_num) + 'rew' + str(mean_rewards)))
                     print('MAX EPOCHS NUM!')
                     should_exit = True
+                # if epoch_num_real >= save_freq
 
                 update_time = 0
 

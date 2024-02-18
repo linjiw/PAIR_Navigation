@@ -36,6 +36,7 @@ num_subscenes: 4 # Splits the simulation into N physics scenes and runs each one
 test: False
 # used to set checkpoint path
 checkpoint: ''
+# checkpoint: '/home/linjiw/Downloads/PAIR_Navigation/isaacgymenvs/saved_model/last_Jackalep345rew[19.41].pth'
 # checkpoint: '/home/linjiw/Documents/isaacgym_original/isaacgymenvs/outputs/2024-02-08/20-12-38/runs/Jackal/nn/Jackal.pth'
 # checkpoint: '/home/linjiw/Documents/isaacgym_original/isaacgymenvs/outputs/2024-02-08/20-12-38/runs/Jackal/nn/last_Jackal_ep_2300_rew_21.13775.pth'
 # checkpoint: '/home/linjiw/Downloads/newisaac/isaacgym-jackal_original/isaacgymenvs/outputs/2024-02-02/15-25-12/runs/Jackal/nn/Jackal.pth'

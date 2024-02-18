@@ -808,7 +808,7 @@ class VAE_ENV:
         # self.generator.load_state_dict(torch.load(f"./../dcgan/saved_models/official_generator_epoch_{model_epoch}.pt"))
         # self.generator.eval()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        model_path = '/home/linjiw/Documents/PAIR_Navigation/dcgan/VAE/vae_model_new.pth'
+        model_path = '/home/linjiw/Downloads/PAIR_Navigation/dcgan/VAE/vae_model_new.pth'
         self.vae = load_model(model_path, self.latent_dim, self.device)
         random_z_dim = 50
         adversary_randomz_obs_space = gym.spaces.Box(low=0, high=1.0, shape=(random_z_dim,), dtype=np.float32)

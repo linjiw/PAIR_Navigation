@@ -114,7 +114,8 @@ class A2CAgent(a2c_common.ContinuousA2CBase):
         
     def save(self, fn):
         state = self.get_full_state_weights()
-        torch_ext.save_checkpoint(fn, state)
+        self.check_point_pth = torch_ext.save_checkpoint(fn, state)
+        print(f"Saved checkpoint to {self.check_point_pth}")
 
     def restore(self, fn):
         checkpoint = torch_ext.load_checkpoint(fn)
@@ -230,7 +231,7 @@ class PAIR_Agent():
         self.env = a2c_common.create_env(params)
         self.protagonist = A2CAgent(base_name, params, created_env=self.env)
         self.antagonist = A2CAgent(base_name, params, created_env=self.env)
-        # self.player = PpoPlayerContinuous(params, self.env)
+        self.player = PpoPlayerContinuous(params, self.env)
         # print(f"env_config: {self.protagonist.env_config}")
         self.num_envs = self.env.num_envs
         print(f"PAIR_Agent init, num_envs: {self.num_envs}")

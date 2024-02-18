@@ -47,6 +47,8 @@ class Runner:
         #self.algo_factory.register_builder('dqn', lambda **kwargs : dqnagent.DQNAgent(**kwargs))
 
         self.player_factory = object_factory.ObjectFactory()
+        # self.player_factory.register_builder('PAIR_Player', lambda **kwargs : players.PAIR_player(**kwargs))
+
         self.player_factory.register_builder('a2c_continuous', lambda **kwargs : players.PpoPlayerContinuous(**kwargs))
         self.player_factory.register_builder('a2c_discrete', lambda **kwargs : players.PpoPlayerDiscrete(**kwargs))
         self.player_factory.register_builder('sac', lambda **kwargs : players.SACPlayer(**kwargs))
@@ -274,6 +276,166 @@ class Runner:
                     # wandb.log({f"eval_stats": eval_stats})
                     # train_adversary(adversary, num_epochs=num_epochs, regret=regret, storage= adversary.storage)
 
+    # def VAE_train(self, args):
+    #     adversarial_args = Namespace(
+    #         use_gae=True,
+    #         gamma=0.995,
+    #         gae_lambda=0.95,
+    #         seed=77,
+    #         recurrent_arch='lstm',
+    #         recurrent_agent=True,
+    #         recurrent_adversary_env=False,
+    #         recurrent_hidden_size=256,
+    #         use_global_critic=False,
+    #         lr=0.0001,
+    #         num_steps=100,
+    #         num_processes=1,
+    #         ppo_epoch=5,
+    #         num_mini_batch=1,
+    #         entropy_coef=0.0,
+    #         value_loss_coef=0.5,
+    #         clip_param=0.2,
+    #         clip_value_loss=True,
+    #         adv_entropy_coef=0.0,
+    #         max_grad_norm=0.5,
+    #         algo='ppo',
+    #         ued_algo='paired',
+    #         use_plr=False,
+    #         handle_timelimits=True,
+    #         log_grad_norm=False,
+    #         eps = 1e-5,
+    #         device='cuda',
+    #         train = True,
+    #         n_episodes = 10,
+    #         latent_dim = 20,
+    #         )
+    #     agent, env = make_agent_env(adversarial_args)
+    #     # agent, env = make_agent_env_barn(adversarial_args)
+    #     adversarial_trainer = AdversarialAgentTrainer(adversarial_args, agent, env )
+        
+    #     print('Started to train')
+    #     print(f"self.algo_name = {self.algo_name}")
+    #     algo_name = 'PAIR_Agent'
+    #     PAIR_agents = self.algo_factory.create(self.algo_name, base_name='run', params=self.params)
+        
+        
+        
+    #     # minigrid = GridEnvironment()
+    #     # adversary = Adversary()
+
+    #     _restore(PAIR_agents.protagonist, args)
+    #     _override_sigma(PAIR_agents.protagonist, args)
+    #     _restore(PAIR_agents.protagonist, args)
+    #     _override_sigma(PAIR_agents.protagonist, args)
+    #     _restore(PAIR_agents.antagonist, args)
+    #     _override_sigma(PAIR_agents.antagonist, args)
+    #     _restore(PAIR_agents.antagonist, args)
+    #     _override_sigma(PAIR_agents.antagonist, args)
+        
+        
+    #     num_envs = PAIR_agents.num_envs
+    #     # print(f"num_envs = {num_envs}")
+    #     # # intilize the mini grid
+    #     pair_id = 0
+    #     # asset_root = './.././assets'
+    #     # self.create_world_folder(asset_root, pair_id = 'pair')
+    #     # random_map: random_all_map(pair_id=self.pair_id, if_random=True)
+
+
+
+    #     if pair_id != '':
+    #         # self.minigrid_rollout(pair_id = pair_id, num_envs = num_envs,env= minigrid, adversary=adversary, num_adversary_rollout=225, minigrid=minigrid)
+    #         rollout_info = adversarial_trainer.agent_rollout(pair_id)
+    #         # print(f"adversarial_trainer.agent.storage.obs['obs'].shape = {adversarial_trainer.agent.storage.obs['obs'].shape}")
+    #         # PAIR_agents.env.random_all_map('_barn')
+    #         PAIR_agents.env.env.reset_jackal()
+    #         PAIR_agents.env.env.random_all_map(pair_id='_pair', if_random=False)
+    #     else:
+    #         pass
+    #         # PAIR_agents.env.random_all_map(pair_id)
+    #     ifeval = True
+    #     if_pair = True
+    #     evaluate_map = True
+    #     evaluate_map_every = 20
+    #     eval_every = 20
+    #     warm_up = 0
+    #     num_epochs = 100
+    #     update_adversary_every = 1
+    #     total_train_epoch = 10000
+    #     for i in range(1, total_train_epoch):
+    #         if if_pair:
+    #             if i > warm_up and (i % update_adversary_every == 0):
+    #                 rollout_info = adversarial_trainer.agent_rollout(i)
+    #                 # PAIR_agents.env.env.reset_jackal()
+    #                 # PAIR_agents.env.env.random_all_map(pair_id='_pair', if_random=False)
+    #                 # print(f"adversarial_trainer.agent.storage.obs['obs'].shape = {adversarial_trainer.agent.storage.obs['obs'].shape}")
+
+    #                 # avg_num_obstackles =self.minigrid_rollout(pair_id = i, num_envs = num_envs,env= minigrid, adversary=adversary, num_adversary_rollout=225, minigrid=minigrid)
+    #                 # print(f"avg_num_obstackles = {avg_num_obstackles}")
+    #                 # wandb.log({f"avg_num_obstackles": avg_num_obstackles})
+    #                 # env_map = adversarial_trainer.env.sample_img
+    #                 # images = wandb.Image(env_map, caption=f"PAIR_ID: {i}")
+                        
+    #                 # wandb.log({f"Generated Map": images})
+    #                 if evaluate_map:
+    #                     if i % evaluate_map_every == 0:
+    #                         # evaluate_map_every = 1
+
+    #                         # PAIR_agents.env.random_all_map('_barn')
+    #                         # PAIR_agents.env.env.reset_jackal()
+    #                         pass
+    #                         # map_pth = PAIR_agents.env.env.grid_root
+    #                         # print(f"map_pth = {map_pth}")
+    #                         # map_metric = test_metrics_for_each_map(map_pth)
+    #                         # wandb.log({f"PAIR/closest_wall": map_metric['closest_wall']})
+    #                         # wandb.log({f"PAIR/avg_visibility": map_metric['avg_visibility']})
+    #                         # wandb.log({f"PAIR/dispersion": map_metric['dispersion']})
+    #                         # wandb.log({f"PAIR/characteristic_dimension": map_metric['characteristic_dimension']})
+    #                         # wandb.log({f"PAIR/occupancy_rate": map_metric['occupancy_rate']})
+    #                         # PAIR_agents.protagonist.writer.add_scalar('PAIR/closest_wall', map_metric['closest_wall'], i)
+    #                         # PAIR_agents.protagonist.writer.add_scalar('PAIR/avg_visibility', map_metric['avg_visibility'], i)
+    #                         # PAIR_agents.protagonist.writer.add_scalar('PAIR/dispersion', map_metric['dispersion'], i)
+    #                         # PAIR_agents.protagonist.writer.add_scalar('PAIR/characteristic_dimension', map_metric['characteristic_dimension'], i)
+    #                         # PAIR_agents.protagonist.writer.add_scalar('PAIR/occupancy_rate', map_metric['occupancy_rate'], i)
+    #         else:
+    #             # PAIR_agents.env.random_all_map('')
+    #             # PAIR_agents.env.env.reset_jackal()
+    #             pass
+            
+    #         # self.reset_seed()
+    #         # self.reset_seed()
+    #         if if_pair:
+    #             PAIR_agents.env.env.reset_jackal()
+    #             PAIR_agents.env.env.random_all_map(pair_id='_pair', if_random=False)
+
+    #             pass
+    #         # np.random.seed(int(time.time())) 
+    #         np.random.seed(int(time.time()))          
+    #         protagonist_rewards, protagonist_mean_rewards, _ = PAIR_agents.protagonist.train(i)
+    #         PAIR_agents.env.env.reset_jackal()
+    #         np.random.seed(int(time.time()))
+    #         antagonist_rewards, antagonist_mean_rewards, _ = PAIR_agents.antagonist.train(i)
+
+    #         regret = torch.abs(protagonist_rewards - antagonist_rewards)
+    #         mean_regret = torch.mean(regret).cpu().numpy()
+    #         wandb.log({f"PAIR/regret": mean_regret})
+    #         wandb.log({f"PAIR/protagonist_rewards": protagonist_mean_rewards})
+    #         wandb.log({f"PAIR/antagonist_rewards": antagonist_mean_rewards})
+    #         PAIR_agents.protagonist.writer.add_scalar('PAIR/regret', mean_regret, i)
+    #         PAIR_agents.protagonist.writer.add_scalar('PAIR/protagonist_rewards', protagonist_mean_rewards, i)
+    #         PAIR_agents.protagonist.writer.add_scalar('PAIR/antagonist_rewards', antagonist_mean_rewards, i)
+    #         print(f"{i} training ended")
+    #         if if_pair:
+    #             if i == warm_up:
+    #                 print(f"warm up done, {protagonist_mean_rewards}, {antagonist_mean_rewards}")
+    #                 PAIR_agents.protagonist.writer.add_scalar('warm_up_rewards', protagonist_mean_rewards, i)
+    #             if i > warm_up and (i % update_adversary_every == 0):
+    #                 update_stats = adversarial_trainer.update_agent(regret)
+    #                 # train_adversary(adversary, num_epochs=num_epochs, regret=regret, storage= adversary.storage)
+
+
+
+
 
     def VAE_train(self, args):
         adversarial_args = Namespace(
@@ -356,7 +518,7 @@ class Runner:
         if_pair = True
         evaluate_map = True
         evaluate_map_every = 20
-        eval_every = 20
+        eval_every = 50
         warm_up = 0
         num_epochs = 100
         update_adversary_every = 1
@@ -438,8 +600,16 @@ class Runner:
                 if i % eval_every == 0:
                     # PAIR_agents.env.random_cy
                     # PAIR_agents.env.random_all_map('')
-
-
+                    PAIR_agents.env.env.reset_jackal()
+                    PAIR_agents.env.env.random_all_map(pair_id='_train', if_random=True)
+                    PAIR_agents.player.restore(PAIR_agents.protagonist.check_point_pth)
+                    _override_sigma(PAIR_agents.player, args)
+                    avg_reward, avg_steps = PAIR_agents.player.run()
+                    wandb.log({f"Eval/avg_reward": avg_reward})
+                    wandb.log({f"Eval/avg_steps": avg_steps})
+                    PAIR_agents.protagonist.writer.add_scalar('Eval/avg_reward', avg_reward, i)
+                    PAIR_agents.protagonist.writer.add_scalar('Eval/avg_steps', avg_steps, i)
+                    print(f"evaluation ended, avg_reward = {avg_reward}, avg_steps = {avg_steps}")
                     pass
                     # PAIR_agents.env.random_all_map('_eval')
 
