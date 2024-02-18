@@ -396,7 +396,7 @@ class Jakcal(VecTask):
             self.gym.refresh_net_contact_force_tensor(self.sim)
 
             # check collision at every sim step rather than env step
-            collided_buf = torch.linalg.norm(self.contact_forces[self.jackal_rigid_body_idx][:, :3], dim=-1) > 0.01
+            collided_buf = torch.linalg.norm(self.contact_forces[self.jackal_rigid_body_idx][:, :3], dim=-1) > 0.005 # 0.01
             collided_buf = torch.logical_or(collided_buf, self.root_states[self.jackal_actor_idx][:, 2] > 0.15)
             self.collided_buf = torch.logical_or(collided_buf, self.collided_buf)
             self.collided_buf = torch.logical_and(self.collided_buf, self.progress_buf > 1)
@@ -843,7 +843,7 @@ class Jakcal(VecTask):
         # This function extracts the number from the file name and returns it for sorting
         numbers = re.findall(r'\d+', file)
         return int(numbers[0]) if numbers else 0
-    def reset_map(self, pair_id = '', if_random = False, follow_order = -1):
+    def reset_map(self, pair_id = '', if_random = False, follow_order = False):
         # for i in range(self.num_envs):
         # print(f"reset_map start")
         self.pair_id = pair_id
@@ -860,6 +860,8 @@ class Jakcal(VecTask):
         
         if if_random:
             self.grid_files = np.random.permutation(self.grid_files * self.num_envs)[:self.num_envs]  # Shuffled and repeated list
+        # elif follow_order:
+        #     self.grid
         if follow_order != -1:
             self.grid_files = self.grid_files[follow_order * self.num_envs : (follow_order + 1) * self.num_envs]
         self.len_map = len(self.grid_files)      
@@ -922,7 +924,7 @@ class Jakcal(VecTask):
             # print(f"root_states {self.root_states.shape}")
             # print(f"self.current_map_lst {self.current_map_lst}")
             for i in range(len(cylinders_idx)):
-                print(f"cylinder_idx[i][:5] {cylinders_idx[i][:5]}")
+                # print(f"cylinder_idx[i][:5] {cylinders_idx[i][:5]}")
                 map_id = self.current_map_lst[grid_id]
                 # print(f"map_id {map_id}")
                 # print(f"self.grid_lst {len(self.grid_lst)}")

@@ -6,6 +6,7 @@ from dcgan.algos import PPO, RolloutStorage, ACAgent
 from dcgan.models import MultigridNetworkTaskEmbedSingleStepContinuous
 import torch
 import wandb
+import numpy as np
 # Simulating command-line arguments
 # args = Namespace(
 #     use_gae=True,
@@ -291,7 +292,21 @@ class AdversarialAgentTrainer:
             if done and step < self.adversary_env_rollout_steps - 1:
                 obs = self.env.reset()  # Reset the environment
                 self.agent.storage.copy_obs_to_index(obs, step + 1)  # Insert the new observation at the next index
-
+        occupancy_rate_list = []
+        for i in range(len(all_infos)):
+            
+            # occupancy_rate = all_infos[i]['occupancy_rate']
+            occupancy_rate_list.append(all_infos[i]['occupancy_rate'])
+        # calculate statistics of occupancy rate
+        print(f"min occupancy rate: {min(occupancy_rate_list)}")
+        print(f"max occupancy rate: {max(occupancy_rate_list)}")
+        # print(f"")
+        print(f"std occupancy rate: {np.std(occupancy_rate_list)}")
+        print(f"mean occupancy rate: {sum(occupancy_rate_list)/len(occupancy_rate_list)}")
+        wandb.log({"min occupancy rate": min(occupancy_rate_list)})
+        wandb.log({"max occupancy rate": max(occupancy_rate_list)})
+        wandb.log({"std occupancy rate": np.std(occupancy_rate_list)})
+        wandb.log({"mean occupancy rate": sum(occupancy_rate_list)/len(occupancy_rate_list)})
         rollout_info['returns'] = rollout_returns
         # print(f"Rollout info: {rollout_info}")
 

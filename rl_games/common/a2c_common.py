@@ -1467,7 +1467,7 @@ class ContinuousA2CBase(A2CBase):
             dataset_dict['rnn_masks'] = rnn_masks
             self.central_value_net.update_dataset(dataset_dict)
 
-    def train(self):
+    def train(self, epoch_num_real=0):
         self.init_tensors()
         self.last_mean_rewards = -100500
         start_time = time.time()
@@ -1481,7 +1481,7 @@ class ContinuousA2CBase(A2CBase):
             model_params = [self.model.state_dict()]
             dist.broadcast_object_list(model_params, 0)
             self.model.load_state_dict(model_params[0])
-        epoch_num_real = 0
+        # epoch_num_real = 0
         while True:
             epoch_num = self.update_epoch()
             epoch_num_real += 1

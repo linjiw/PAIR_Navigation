@@ -60,12 +60,12 @@ params:
     score_to_win: 20000
     max_epochs: 1 #${resolve_default:500,${....max_iterations}}
     save_best_after: 0
-    save_frequency: 100
+    save_frequency: 50
     grad_norm: 1.0
     entropy_coef: 0.0
     truncate_grads: False
     e_clip: 0.2
-    horizon_length: 128 # 32
+    horizon_length: 256 # 32
     minibatch_size: 2048 # 2048
     mini_epochs: 4
     critic_coef: 2

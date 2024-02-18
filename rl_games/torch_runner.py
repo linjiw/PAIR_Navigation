@@ -287,7 +287,7 @@ class Runner:
             recurrent_hidden_size=256,
             use_global_critic=False,
             lr=0.0001,
-            num_steps=20,
+            num_steps=100,
             num_processes=1,
             ppo_epoch=5,
             num_mini_batch=1,
@@ -338,13 +338,17 @@ class Runner:
         pair_id = 0
         # asset_root = './.././assets'
         # self.create_world_folder(asset_root, pair_id = 'pair')
-        
+        # random_map: random_all_map(pair_id=self.pair_id, if_random=True)
+
+
+
         if pair_id != '':
             # self.minigrid_rollout(pair_id = pair_id, num_envs = num_envs,env= minigrid, adversary=adversary, num_adversary_rollout=225, minigrid=minigrid)
             rollout_info = adversarial_trainer.agent_rollout(pair_id)
             # print(f"adversarial_trainer.agent.storage.obs['obs'].shape = {adversarial_trainer.agent.storage.obs['obs'].shape}")
             # PAIR_agents.env.random_all_map('_barn')
-            # PAIR_agents.env.env.reset_jackal()
+            PAIR_agents.env.env.reset_jackal()
+            PAIR_agents.env.env.random_all_map(pair_id='_pair', if_random=False)
         else:
             pass
             # PAIR_agents.env.random_all_map(pair_id)
@@ -361,6 +365,8 @@ class Runner:
             if if_pair:
                 if i > warm_up and (i % update_adversary_every == 0):
                     rollout_info = adversarial_trainer.agent_rollout(i)
+                    # PAIR_agents.env.env.reset_jackal()
+                    # PAIR_agents.env.env.random_all_map(pair_id='_pair', if_random=False)
                     # print(f"adversarial_trainer.agent.storage.obs['obs'].shape = {adversarial_trainer.agent.storage.obs['obs'].shape}")
 
                     # avg_num_obstackles =self.minigrid_rollout(pair_id = i, num_envs = num_envs,env= minigrid, adversary=adversary, num_adversary_rollout=225, minigrid=minigrid)
@@ -396,14 +402,19 @@ class Runner:
                 pass
             
             # self.reset_seed()
-            
-            protagonist_rewards, protagonist_mean_rewards, _ = PAIR_agents.protagonist.train()
             # self.reset_seed()
             if if_pair:
+                PAIR_agents.env.env.reset_jackal()
+                PAIR_agents.env.env.random_all_map(pair_id='_pair', if_random=False)
                 # PAIR_agents.env.random_all_map('_barn')
                 # PAIR_agents.env.env.reset_jackal()
                 pass
-            antagonist_rewards, antagonist_mean_rewards, _ = PAIR_agents.antagonist.train()
+            # np.random.seed(int(time.time())) 
+            np.random.seed(int(time.time()))          
+            protagonist_rewards, protagonist_mean_rewards, _ = PAIR_agents.protagonist.train(i)
+            PAIR_agents.env.env.reset_jackal()
+            np.random.seed(int(time.time()))
+            antagonist_rewards, antagonist_mean_rewards, _ = PAIR_agents.antagonist.train(i)
 
             regret = torch.abs(protagonist_rewards - antagonist_rewards)
             # print(f"regret.shape = {regret}")

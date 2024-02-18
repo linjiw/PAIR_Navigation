@@ -2,11 +2,13 @@
 
 import matplotlib.pyplot as plt
 from torchvision.utils import save_image
+# from model import VAE
 from dcgan.VAE.model import VAE  # Replace 'vae_model' with the actual module name
 # from dataset import NumpyDataset  # Replace 'dataset' with the actual module name
 import torch
 import os
 import numpy as np
+
 
 def load_model(model_path, latent_dim, device):
     # Initialize the model
@@ -48,9 +50,14 @@ def generate_images(model, num_samples, latent_dim, device, save_dir='generated_
 
     return generated_images
 
-def sample_and_save_binary_images(model, num_samples, random_latent_vectors, device, save_dir='binary_images', threshold=0.5):
+def sample_and_save_binary_images(model, episode, random_latent_vectors, device, step_id, save_dir='binary_images', threshold=0.5):
     # Ensure the save directory exists
-    os.makedirs(save_dir, exist_ok=True)
+    # print(f"current working directory: {os.getcwd()}")
+    episode = 'pair'
+    sample_folder = f"{save_dir}/worlds_{episode}"
+    os.makedirs(sample_folder, exist_ok=True)
+
+    # os.makedirs(save_dir, exist_ok=True)
 
     # Sample random vectors from the standard normal distribution
     # random_latent_vectors = torch.randn(num_samples, latent_dim).to(device)
@@ -63,6 +70,7 @@ def sample_and_save_binary_images(model, num_samples, random_latent_vectors, dev
     # Reshape the output to image format
     generated_images = generated_images.view(-1, 1, 30, 30)
     occupancy_rate_list = []
+    occupancy_rate = 0
     for i, image in enumerate(generated_images):
         # Apply threshold to convert image to binary
         binary_image = (image.squeeze().cpu().numpy() > threshold).astype(np.uint8)
@@ -70,30 +78,40 @@ def sample_and_save_binary_images(model, num_samples, random_latent_vectors, dev
         occupancy_rate = np.sum(binary_image) / binary_image.size
         occupancy_rate_list.append(occupancy_rate)
         # Save each binary image as .npy file
-        save_path = os.path.join(save_dir, f"binary_image_{i}.npy")
+        save_path = os.path.join(sample_folder, f"binary_image_{step_id}.npy")
+        # print(f"Saving binary image to {save_path}")
         np.save(save_path, binary_image)
     # calculate statistics of occupancy rate
-    print(f"Occupancy rate mean: {np.mean(occupancy_rate_list)}")
-    print(f"Occupancy rate std: {np.std(occupancy_rate_list)}")
-    print(f"Occupancy rate min: {np.min(occupancy_rate_list)}")
-    print(f"Occupancy rate max: {np.max(occupancy_rate_list)}")
-    return generated_images
+    # print(f"Occupancy rate mean: {np.mean(occupancy_rate_list)}")
+    # print(f"Occupancy rate std: {np.std(occupancy_rate_list)}")
+    # print(f"Occupancy rate min: {np.min(occupancy_rate_list)}")
+    # print(f"Occupancy rate max: {np.max(occupancy_rate_list)}")
+    return generated_images, occupancy_rate
 
 # Usage example
 
 if __name__ == "__main__":
-    model_path = "vae_model.pth"
+    model_path = "vae_model_new.pth"
     num_samples = 100
     latent_dim = 20
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Load the model
     loaded_model = load_model(model_path, latent_dim, device)
-    random_latent_vectors = torch.rand(num_samples, latent_dim).to(device)
 
     # Generate and visualize images
     # generate_images(loaded_model, num_samples, latent_dim, device)
-    sample_and_save_binary_images(loaded_model, num_samples, random_latent_vectors, device)
+    occupancy_rate_list = []
+    for i in range(num_samples):
+        random_latent_vectors = torch.rand(1, latent_dim).to(device)
+
+        _, occupancy_rate = sample_and_save_binary_images(loaded_model, 'pair', random_latent_vectors, device, i, save_dir='binary_images', threshold=0.5)
+        occupancy_rate_list.append(occupancy_rate)
+    print(f"Occupancy rate mean: {np.mean(occupancy_rate_list)}")
+    print(f"Occupancy rate std: {np.std(occupancy_rate_list)}")
+    print(f"Occupancy rate min: {np.min(occupancy_rate_list)}")
+    print(f"Occupancy rate max: {np.max(occupancy_rate_list)}")
+    # sample_and_save_binary_images(loaded_model, num_samples, random_latent_vectors, device)
 # model_path = "vae_model.pth"
 # num_samples = 100
 # latent_dim = 20

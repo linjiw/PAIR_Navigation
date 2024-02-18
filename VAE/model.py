@@ -9,7 +9,7 @@ class Encoder(nn.Module):
         self.fc21 = nn.Linear(400, latent_dim)
         self.fc22 = nn.Linear(400, latent_dim)
         # add dropout layers
-        self.drop_out1 = nn.Dropout(0.3)
+        # self.drop_out1 = nn.Dropout(0.3)
 
     def forward(self, x):
         h1 = F.relu(self.fc1(x))
@@ -22,7 +22,7 @@ class Decoder(nn.Module):
         self.fc3 = nn.Linear(latent_dim, 400)
         self.fc4 = nn.Linear(400, 30*30)
         # add dropout layers
-        self.drop_out3 = nn.Dropout(0.3)
+        # self.drop_out3 = nn.Dropout(0.3)
 
     def forward(self, z):
         h3 = F.relu(self.fc3(z))

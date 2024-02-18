@@ -808,7 +808,7 @@ class VAE_ENV:
         # self.generator.load_state_dict(torch.load(f"./../dcgan/saved_models/official_generator_epoch_{model_epoch}.pt"))
         # self.generator.eval()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        model_path = '/home/linjiw/Documents/PAIR_Navigation/dcgan/VAE/vae_model.pth'
+        model_path = '/home/linjiw/Documents/PAIR_Navigation/dcgan/VAE/vae_model_new.pth'
         self.vae = load_model(model_path, self.latent_dim, self.device)
         random_z_dim = 50
         adversary_randomz_obs_space = gym.spaces.Box(low=0, high=1.0, shape=(random_z_dim,), dtype=np.float32)
@@ -822,7 +822,8 @@ class VAE_ENV:
         self.time_string = current_time.strftime("%m_%d_%Y_%H_%M_%S")
         self.adversary_action_space = gym.spaces.Box(low=latent_dim_min, high=latent_dim_max, shape=action_shape, dtype='float32')
         self.global_sample_count = 0
-        self.folder_name = './../assets/urdf/jackal'
+        self.folder_name = './../../../../assets/urdf/jackal'
+        # self.folder_name = './../assets/urdf/jackal'
         # if torch.cuda.is_available():
         #     self.generator.cuda()
 
@@ -843,12 +844,13 @@ class VAE_ENV:
         # Format the time string as "month_day_year_hour_min_sec"
         # step_id = 'pair'
         random_latent_vectors = action
-        sample_and_save_binary_images(self.vae, 1, random_latent_vectors, self.device)
+        _, occupancy_rate = sample_and_save_binary_images(self.vae, episode, random_latent_vectors, self.device, step_id,save_dir=self.folder_name)
         # self.sample_img = sample(self.generator, action, self.folder_name, episode, str(step_id), self.img_shape)
         self.global_sample_count += 1
         reward = torch.randn(1)
         done = True
         info = {}
+        info['occupancy_rate'] = occupancy_rate
         # print(f"globe_sample_count: {self.global_sample_count}")
         return self.reset(), reward, done, info
     
