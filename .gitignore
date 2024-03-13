@@ -17,4 +17,5 @@ path_files/
 VAE/dataset/test/*.npy
 VAE/dataset/train/*.npy
 VAE/generated_images/
-
+worlds_pair/*.npy
+assets/urdf/jackal/worlds_pair/
