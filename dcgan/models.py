@@ -880,7 +880,7 @@ class VAE_ENV:
         done = True
         info = {}
         info['occupancy_rate'] = occupancy_rate
-        info['good_map'] = good_map
+        info['if_good_map'] = good_map
         # print(f"globe_sample_count: {self.global_sample_count}")
         return self.reset(), reward, done, info
     

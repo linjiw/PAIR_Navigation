@@ -262,9 +262,18 @@ class RolloutStorage(object):
 	# def replace_final_return(self, returns):
 
 	# 	self.rewards[:,0] = returns
+	# def replace_final_return(self, returns):
+	# 	print(f"self.rewards.shape: {self.rewards.shape}")
+	# 	print(f"returns.shape: {returns.shape}")
+	# 	mask = self.rewards[:, 0] != 0  # Create a mask for elements not equal to zero
+	# 	print(f"mask.shape: {mask.shape}")
+	# 	self.rewards[:, 0][mask] = returns  # Only replace elements where mask is True
 	def replace_final_return(self, returns):
-		mask = self.rewards[:, 0] != 0  # Create a mask for elements not equal to zero
-		self.rewards[:, 0][mask] = returns  # Only replace elements where mask is True
+		mask = self.rewards[:, 0, 0] != 0  # Adjust mask to match the innermost dimension
+		# Make sure 'returns' is correctly shaped to match the masked elements
+		# It should be a 1D tensor matching the number of True elements in the mask
+		returns = returns[mask].squeeze()  # Adjust 'returns' to have the correct shape
+		self.rewards[:, 0, 0][mask] = returns
 
   
 	def replace_obs(self, obs):

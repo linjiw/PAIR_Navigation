@@ -518,7 +518,7 @@ class Runner:
         if_pair = True
         evaluate_map = True
         evaluate_map_every = 20
-        eval_every = 1
+        eval_every = 50
         warm_up = 0
         num_epochs = 100
         update_adversary_every = 1

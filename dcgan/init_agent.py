@@ -308,9 +308,9 @@ class AdversarialAgentTrainer:
         wandb.log({"std occupancy rate": np.std(occupancy_rate_list)})
         wandb.log({"mean occupancy rate": sum(occupancy_rate_list)/len(occupancy_rate_list)})
         # iterate infos (a dict) and log in to wandb
-        for i in range(len(all_infos)):
-            for key in all_infos[i].keys():
-                wandb.log({key: all_infos[i][key]})
+        # for i in range(len(all_infos)):
+        #     for key in all_infos[i].keys():
+        #         wandb.log({key: all_infos[i][key]})
                 
         rollout_info['returns'] = rollout_returns
         # print(f"Rollout info: {rollout_info}")
@@ -321,13 +321,18 @@ class AdversarialAgentTrainer:
         for infos in all_infos:
             for key in infos.keys():
                 if key not in avg_infos.keys():
-                    avg_infos[key] = infos[key]
+                    avg_infos[key] = float(infos[key])
                 else:
-                    avg_infos[key] += infos[key]
+                    avg_infos[key] += float(infos[key])
         for key in avg_infos.keys():
             avg_infos[key] /= len(all_infos)
+            print(f"logging {key}: {avg_infos[key]}")
+            wandb.log({key: avg_infos[key]})
         print(f"avg_infos: {avg_infos}")
-        wandb.log(avg_infos)
+        # wandb.log(avg_infos)
+        # for i in range(len(avg_infos)):
+        #     for key in avg_infos[i].keys():
+        #         wandb.log({key: avg_infos[i][key]})     
         return rollout_info
 
     # def agent_rollout(self):
