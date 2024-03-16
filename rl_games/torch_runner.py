@@ -518,7 +518,7 @@ class Runner:
         if_pair = True
         evaluate_map = True
         evaluate_map_every = 20
-        eval_every = 50
+        eval_every = 1
         warm_up = 0
         num_epochs = 100
         update_adversary_every = 1
@@ -598,19 +598,22 @@ class Runner:
                     # train_adversary(adversary, num_epochs=num_epochs, regret=regret, storage= adversary.storage)
             if ifeval:
                 if i % eval_every == 0:
+                    curr_time_str = time.strftime("%Y%m%d-%H%M%S")
+                    adversarial_trainer.agent.algo.actor_critic.save_checkpoint(f'teacher_model_{curr_time_str}.pth')
+                    
                     # PAIR_agents.env.random_cy
                     # PAIR_agents.env.random_all_map('')
-                    PAIR_agents.env.env.reset_jackal()
-                    PAIR_agents.env.env.random_all_map(pair_id='_train', if_random=True)
-                    PAIR_agents.player.restore(PAIR_agents.protagonist.check_point_pth)
-                    _override_sigma(PAIR_agents.player, args)
-                    avg_reward, avg_steps = PAIR_agents.player.run()
-                    wandb.log({f"Eval/avg_reward": avg_reward})
-                    wandb.log({f"Eval/avg_steps": avg_steps})
-                    PAIR_agents.protagonist.writer.add_scalar('Eval/avg_reward', avg_reward, i)
-                    PAIR_agents.protagonist.writer.add_scalar('Eval/avg_steps', avg_steps, i)
-                    print(f"evaluation ended, avg_reward = {avg_reward}, avg_steps = {avg_steps}")
-                    pass
+                    # PAIR_agents.env.env.reset_jackal()
+                    # PAIR_agents.env.env.random_all_map(pair_id='_train', if_random=True)
+                    # PAIR_agents.player.restore(PAIR_agents.protagonist.check_point_pth)
+                    # _override_sigma(PAIR_agents.player, args)
+                    # avg_reward, avg_steps = PAIR_agents.player.run()
+                    # wandb.log({f"Eval/avg_reward": avg_reward})
+                    # wandb.log({f"Eval/avg_steps": avg_steps})
+                    # PAIR_agents.protagonist.writer.add_scalar('Eval/avg_reward', avg_reward, i)
+                    # PAIR_agents.protagonist.writer.add_scalar('Eval/avg_steps', avg_steps, i)
+                    # print(f"evaluation ended, avg_reward = {avg_reward}, avg_steps = {avg_steps}")
+                    # pass
                     # PAIR_agents.env.random_all_map('_eval')
 
                     # PAIR_agents.env.env.reset_jackal()

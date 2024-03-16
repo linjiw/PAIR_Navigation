@@ -661,7 +661,7 @@ class MultigridNetworkTaskEmbedSingleStepContinuous(DeviceAwareModule):
         self.load_state_dict(checkpoint['model_state_dict'])
         if optimizer and 'optimizer_state_dict' in checkpoint and checkpoint['optimizer_state_dict'] is not None:
             optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-        print(f"Checkpoint loaded from {file_path}"
+        print(f"Checkpoint loaded from {file_path}")
 
 def print_image_as_dots(image_array):
     for row in image_array:
@@ -818,6 +818,7 @@ class TestMultigridNetwork(unittest.TestCase):
 
 class VAE_ENV:
     def __init__(self):
+        print("VAE_ENV running...")
         # Initialize Generator
         encoder_dim = 50
         # latent_dim = 100

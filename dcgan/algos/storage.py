@@ -259,17 +259,13 @@ class RolloutStorage(object):
 		# plot_and_save(self.actions, mean, 'Mean')
 		# plot_and_save(self.actions, min_val, 'Minimum')
 		# plot_and_save(self.actions, max_val, 'Maximum')
-	def replace_final_return(self, returns):
-		# print(f"self.rewards.shape: {self.rewards.shape}")
-		# print(f"self.action_log_probs.shape: {self.action_log_probs.shape}")
-		# print(f"before replace_final_return self.rewards.shape: {self.rewards.shape}")
-		# print(f"self.action_log_probs[-1]: {self.action_log_probs[:,0,0]}")
-		# self.rewards[-1] = returns
-		self.rewards[:,0] = returns
-		# self.rewards[0][0] = returns
-		# print(f"after replace_final_return self.rewards.shape: {self.rewards.shape}")
+	# def replace_final_return(self, returns):
 
-		# print(f"self.rewards: {self.rewards}")
+	# 	self.rewards[:,0] = returns
+	def replace_final_return(self, returns):
+		mask = self.rewards[:, 0] != 0  # Create a mask for elements not equal to zero
+		self.rewards[:, 0][mask] = returns  # Only replace elements where mask is True
+
   
 	def replace_obs(self, obs):
 		# print(f"old obs: {self.obs}")

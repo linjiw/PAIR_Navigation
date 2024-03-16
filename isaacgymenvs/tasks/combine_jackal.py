@@ -878,7 +878,7 @@ class Jakcal(VecTask):
         
         self.current_map_lst = [i for i in range(self.num_envs)]
         # print(f"init self.current_map_lst {self.current_map_lst}")
-        print(f"self.grid_files[:self.num_envs] {self.grid_files[:self.num_envs]}")
+        # print(f"self.grid_files[:self.num_envs] {self.grid_files[:self.num_envs]}")
         for i in range(len(self.grid_files)):
             # print(f"self.grid_files[i] {self.grid_files[i]}")
             grid = np.load(os.path.join(self.grid_root, self.grid_files[i]))
