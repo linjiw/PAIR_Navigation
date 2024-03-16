@@ -869,13 +869,18 @@ class VAE_ENV:
         # Format the time string as "month_day_year_hour_min_sec"
         # step_id = 'pair'
         random_latent_vectors = action
-        _, occupancy_rate = sample_and_save_binary_images(self.vae, episode, random_latent_vectors, self.device, step_id,save_dir=self.folder_name)
+        _, occupancy_rate, good_map = sample_and_save_binary_images(self.vae, episode, random_latent_vectors, self.device, step_id,save_dir=self.folder_name)
         # self.sample_img = sample(self.generator, action, self.folder_name, episode, str(step_id), self.img_shape)
         self.global_sample_count += 1
-        reward = torch.randn(1)
+        if good_map:
+            
+            reward = torch.randn(1)
+        else:
+            reward = torch.zeros(1)
         done = True
         info = {}
         info['occupancy_rate'] = occupancy_rate
+        info['good_map'] = good_map
         # print(f"globe_sample_count: {self.global_sample_count}")
         return self.reset(), reward, done, info
     

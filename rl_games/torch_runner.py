@@ -246,7 +246,7 @@ class Runner:
             PAIR_agents.protagonist.writer.add_scalar('PAIR/protagonist_rewards', protagonist_mean_rewards, i)
             PAIR_agents.protagonist.writer.add_scalar('PAIR/antagonist_rewards', antagonist_mean_rewards, i)
             # print(f"{i}: protagonist_rewards = {protagonist_rewards}; antagonist_rewards = {antagonist_rewards}")
-            print(f"{i} training ended")
+            print(f"{i} training ended: current time = {time.time()}")
             if if_pair:
                 if i == warm_up:
                     print(f"warm up done, {protagonist_mean_rewards}, {antagonist_mean_rewards}")
@@ -588,7 +588,7 @@ class Runner:
             PAIR_agents.protagonist.writer.add_scalar('PAIR/protagonist_rewards', protagonist_mean_rewards, i)
             PAIR_agents.protagonist.writer.add_scalar('PAIR/antagonist_rewards', antagonist_mean_rewards, i)
             # print(f"{i}: protagonist_rewards = {protagonist_rewards}; antagonist_rewards = {antagonist_rewards}")
-            print(f"{i} training ended")
+            print(f"{i} training ended current time = {time.time()}")
             if if_pair:
                 if i == warm_up:
                     print(f"warm up done, {protagonist_mean_rewards}, {antagonist_mean_rewards}")

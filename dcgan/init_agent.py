@@ -307,6 +307,11 @@ class AdversarialAgentTrainer:
         wandb.log({"max occupancy rate": max(occupancy_rate_list)})
         wandb.log({"std occupancy rate": np.std(occupancy_rate_list)})
         wandb.log({"mean occupancy rate": sum(occupancy_rate_list)/len(occupancy_rate_list)})
+        # iterate infos (a dict) and log in to wandb
+        for i in range(len(all_infos)):
+            for key in all_infos[i].keys():
+                wandb.log({key: all_infos[i][key]})
+                
         rollout_info['returns'] = rollout_returns
         # print(f"Rollout info: {rollout_info}")
 
