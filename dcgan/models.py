@@ -639,6 +639,30 @@ class MultigridNetworkTaskEmbedSingleStepContinuous(DeviceAwareModule):
 
         return value, action_log_probs, dist_entropy, rnn_hxs
 
+
+    def save_checkpoint(self, file_path):
+        """
+        Save the model checkpoint.
+        :param file_path: Path to file where the checkpoint will be saved.
+        """
+        torch.save({
+            'model_state_dict': self.state_dict(),
+            'optimizer_state_dict': self.optimizer.state_dict() if hasattr(self, 'optimizer') else None
+        }, file_path)
+        print(f"Checkpoint saved to {file_path}")
+
+    def load_checkpoint(self, file_path, optimizer=None):
+        """
+        Load the model checkpoint.
+        :param file_path: Path to file from where the checkpoint will be loaded.
+        :param optimizer: The optimizer to load the state into, if provided.
+        """
+        checkpoint = torch.load(file_path)
+        self.load_state_dict(checkpoint['model_state_dict'])
+        if optimizer and 'optimizer_state_dict' in checkpoint and checkpoint['optimizer_state_dict'] is not None:
+            optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+        print(f"Checkpoint loaded from {file_path}"
+
 def print_image_as_dots(image_array):
     for row in image_array:
         for pixel in row:
