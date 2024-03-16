@@ -74,5 +74,5 @@ params:
     bounds_loss_coef: 0.0001
     change_env_freq: 64
   player:
-    games_num: 5000
+    games_num: 10
     max_steps: 32

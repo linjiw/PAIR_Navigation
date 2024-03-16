@@ -656,7 +656,8 @@ class BasePlayer(object):
         self.n_game_life = self.player_config.get('n_game_life', 1)
         self.print_stats = self.player_config.get('print_stats', True)
         self.render_sleep = self.player_config.get('render_sleep', 0.002)
-        self.max_steps = 108000 // 4
+        # self.max_steps = 108000 // 4
+        self.max_steps = self.player_config.get('max_steps', 32)
         # self.max_steps =
         self.device = torch.device(self.device_name)
 
@@ -889,7 +890,7 @@ class BasePlayer(object):
         n_games = 50
         change_map_freq = n_games//5
         total_map = 0
-        for _ in range(n_games):
+        for game_num in range(n_games):
             if games_played >= n_games:
                 break
 
@@ -905,8 +906,9 @@ class BasePlayer(object):
             steps = torch.zeros(batch_size, dtype=torch.float32)
 
             print_game_res = False
-
+            print(f"start game: {game_num}")
             for n in range(self.max_steps):
+                # print(f"current step: {n}")
                 if games_played >= n_games:
                         break
                 # print(f"games_played: {games_played} total_map: {total_map}")
@@ -949,9 +951,9 @@ class BasePlayer(object):
                 all_done_indices = done.nonzero(as_tuple=False)
                 done_indices = all_done_indices[::self.num_agents]
                 done_count = len(done_indices)
-                if done_count > 0 and games_played % change_map_freq == 0:
-                    self.env.env.random_all_map('_eval', if_random=True)
-                    obses = self.env_reset(self.env)
+                # if done_count > 0 and games_played % change_map_freq == 0:
+                #     self.env.env.random_all_map('_eval', if_random=True)
+                #     obses = self.env_reset(self.env)
                     # pass
                 games_played += done_count
 

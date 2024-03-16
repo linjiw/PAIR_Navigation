@@ -604,15 +604,15 @@ class Runner:
                     # PAIR_agents.env.random_cy
                     # PAIR_agents.env.random_all_map('')
                     # PAIR_agents.env.env.reset_jackal()
-                    # PAIR_agents.env.env.random_all_map(pair_id='_train', if_random=True)
-                    # PAIR_agents.player.restore(PAIR_agents.protagonist.check_point_pth)
-                    # _override_sigma(PAIR_agents.player, args)
-                    # avg_reward, avg_steps = PAIR_agents.player.run()
-                    # wandb.log({f"Eval/avg_reward": avg_reward})
-                    # wandb.log({f"Eval/avg_steps": avg_steps})
+                    PAIR_agents.env.env.random_all_map(pair_id='_train', if_random=True)
+                    PAIR_agents.player.restore(PAIR_agents.protagonist.check_point_pth)
+                    _override_sigma(PAIR_agents.player, args)
+                    avg_reward, avg_steps = PAIR_agents.player.run()
+                    wandb.log({f"Eval/avg_reward": avg_reward})
+                    wandb.log({f"Eval/avg_steps": avg_steps})
                     # PAIR_agents.protagonist.writer.add_scalar('Eval/avg_reward', avg_reward, i)
                     # PAIR_agents.protagonist.writer.add_scalar('Eval/avg_steps', avg_steps, i)
-                    # print(f"evaluation ended, avg_reward = {avg_reward}, avg_steps = {avg_steps}")
+                    print(f"evaluation ended, avg_reward = {avg_reward}, avg_steps = {avg_steps}")
                     # pass
                     # PAIR_agents.env.random_all_map('_eval')
 
