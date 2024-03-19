@@ -523,6 +523,8 @@ class Runner:
         num_epochs = 100
         update_adversary_every = 1
         total_train_epoch = 10000
+        adversarial_trainer.agent.algo.actor_critic.load_checkpoint(f'/home/linjiw/Downloads/PAIR_Navigation/isaacgymenvs/outputs/2024-03-16/02-39-19/teacher_model_20240318-081059.pth')
+
         for i in range(1, total_train_epoch):
             if if_pair:
                 if i > warm_up and (i % update_adversary_every == 0):
