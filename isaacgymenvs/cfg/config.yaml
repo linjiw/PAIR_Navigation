@@ -35,8 +35,8 @@ num_subscenes: 4 # Splits the simulation into N physics scenes and runs each one
 # test - if set, run policy in inference mode (requires setting checkpoint to load)
 test: False
 # used to set checkpoint path
-# checkpoint: ''
-checkpoint: '/home/linjiw/Downloads/PAIR_Navigation/isaacgymenvs/outputs/2024-03-16/02-39-19/runs/Jackal/nn/last_Jackalep950rew[21.37].pth'
+checkpoint: ''
+# checkpoint: '/home/linjiw/Downloads/PAIR_Navigation/isaacgymenvs/outputs/2024-03-16/02-39-19/runs/Jackal/nn/last_Jackalep950rew[21.37].pth'
 # checkpoint: '/home/linjiw/Downloads/PAIR_Navigation/isaacgymenvs/saved_model/last_Jackalep345rew[19.41].pth'
 # checkpoint: '/home/linjiw/Documents/isaacgym_original/isaacgymenvs/outputs/2024-02-08/20-12-38/runs/Jackal/nn/Jackal.pth'
 # checkpoint: '/home/linjiw/Documents/isaacgym_original/isaacgymenvs/outputs/2024-02-08/20-12-38/runs/Jackal/nn/last_Jackal_ep_2300_rew_21.13775.pth'

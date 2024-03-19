@@ -438,6 +438,14 @@ class Runner:
 
 
     def VAE_train(self, args):
+        
+        print('Started to train')
+        print(f"self.algo_name = {self.algo_name}")
+        algo_name = 'PAIR_Agent'
+        PAIR_agents = self.algo_factory.create(self.algo_name, base_name='run', params=self.params)
+        
+        num_envs = PAIR_agents.num_envs
+
         adversarial_args = Namespace(
             use_gae=True,
             gamma=0.995,
@@ -449,7 +457,7 @@ class Runner:
             recurrent_hidden_size=256,
             use_global_critic=False,
             lr=0.0001,
-            num_steps=100,
+            num_steps=num_envs,
             num_processes=1,
             ppo_epoch=5,
             num_mini_batch=1,
@@ -474,11 +482,7 @@ class Runner:
         # agent, env = make_agent_env_barn(adversarial_args)
         adversarial_trainer = AdversarialAgentTrainer(adversarial_args, agent, env )
         
-        print('Started to train')
-        print(f"self.algo_name = {self.algo_name}")
-        algo_name = 'PAIR_Agent'
-        PAIR_agents = self.algo_factory.create(self.algo_name, base_name='run', params=self.params)
-        
+
         
         
         # minigrid = GridEnvironment()
@@ -494,7 +498,6 @@ class Runner:
         _override_sigma(PAIR_agents.antagonist, args)
         
         
-        num_envs = PAIR_agents.num_envs
         # print(f"num_envs = {num_envs}")
         # # intilize the mini grid
         pair_id = 0

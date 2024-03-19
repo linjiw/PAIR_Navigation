@@ -4,7 +4,7 @@ name: Jackal
 physics_engine: 'physx'
 
 env:
-  numEnvs: 100 #${resolve_default:4096,${...num_envs}}
+  numEnvs: 20 #${resolve_default:4096,${...num_envs}}
   numObservations: 724
   numActions: 2
   envSpacing: 5.  # [m]

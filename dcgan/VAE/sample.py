@@ -170,7 +170,7 @@ def load_npy_files_from_folder(folder_path):
     return npy_files
 
 # Replace 'your_folder_path_here' with the actual path to your folder containing .npy files
-folder_path = '/home/linjiw/Downloads/PAIR_Navigation/assets/urdf/jackal/worlds_eval'
+folder_path = '../../../../assets/urdf/jackal/worlds_eval'
 npy_files_list = load_npy_files_from_folder(folder_path)
 
 def sample_and_save_binary_images(model, episode, random_latent_vectors, device, step_id, save_dir='binary_images', threshold=0.5):
