@@ -29,9 +29,9 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import sys
-sys.path.append("/home/linjiw/Downloads/newisaac/isaacgym-jackal/")
+sys.path.append("/opt/PAIRE_Navigation/")
+sys.path.insert(0, '/opt/PAIRE_Navigation/')
 sys.path.insert(0, './..')
-
 import datetime
 import isaacgym
 
