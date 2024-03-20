@@ -519,6 +519,7 @@ class MultigridNetworkTaskEmbedSingleStepContinuous(DeviceAwareModule):
         self.random = False
         self.action_space = action_space
 
+        self.check_point_pth = None
 
 
         self.action_dim = action_space.shape[0]
@@ -649,7 +650,8 @@ class MultigridNetworkTaskEmbedSingleStepContinuous(DeviceAwareModule):
             'model_state_dict': self.state_dict(),
             'optimizer_state_dict': self.optimizer.state_dict() if hasattr(self, 'optimizer') else None
         }, file_path)
-        print(f"Checkpoint saved to {file_path}")
+        self.check_point_pth = os.path.abspath(file_path)
+        print(f"Checkpoint saved to {self.check_point_pth}")
 
     def load_checkpoint(self, file_path, optimizer=None):
         """

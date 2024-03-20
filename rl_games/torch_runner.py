@@ -527,7 +527,7 @@ class Runner:
         update_adversary_every = 1
         total_train_epoch = 10000
         # adversarial_trainer.agent.algo.actor_critic.load_checkpoint(f'/home/linjiw/Downloads/PAIR_Navigation/isaacgymenvs/outputs/2024-03-16/02-39-19/teacher_model_20240318-081059.pth')
-
+        # artifact.add_file(model_path)
         for i in range(1, total_train_epoch):
             if if_pair:
                 if i > warm_up and (i % update_adversary_every == 0):
@@ -595,6 +595,10 @@ class Runner:
             # print(f"{i}: protagonist_rewards = {protagonist_rewards}; antagonist_rewards = {antagonist_rewards}")
             curr_time_str = time.strftime("%Y%m%d-%H%M%S")
             print(f"{i} training ended current time = {curr_time_str}")
+            agent_artifact = wandb.Artifact('agent', type='model')
+
+            agent_artifact.add_file(PAIR_agents.protagonist.check_point_pth, name=f'agent_{curr_time_str}.pth')
+            wandb.log(agent_artifact)
             if if_pair:
                 if i == warm_up:
                     print(f"warm up done, {protagonist_mean_rewards}, {antagonist_mean_rewards}")
@@ -606,7 +610,10 @@ class Runner:
                 if i % eval_every == 0:
                     curr_time_str = time.strftime("%Y%m%d-%H%M%S")
                     adversarial_trainer.agent.algo.actor_critic.save_checkpoint(f'teacher_model_{curr_time_str}.pth')
-                    
+                    teacher_artifact = wandb.Artifact('teacher', type='model')
+
+                    teacher_artifact.add_file(f'{adversarial_trainer.agent.algo.actor_critic.check_point_pth}', name=f'teacher_{curr_time_str}.pth')
+                    wandb.log(teacher_artifact)
                     # PAIR_agents.env.random_cy
                     # PAIR_agents.env.random_all_map('')
                     # PAIR_agents.env.env.reset_jackal()
