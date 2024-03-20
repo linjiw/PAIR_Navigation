@@ -526,7 +526,7 @@ class Runner:
         num_epochs = 100
         update_adversary_every = 1
         total_train_epoch = 10000
-        adversarial_trainer.agent.algo.actor_critic.load_checkpoint(f'/home/linjiw/Downloads/PAIR_Navigation/isaacgymenvs/outputs/2024-03-16/02-39-19/teacher_model_20240318-081059.pth')
+        # adversarial_trainer.agent.algo.actor_critic.load_checkpoint(f'/home/linjiw/Downloads/PAIR_Navigation/isaacgymenvs/outputs/2024-03-16/02-39-19/teacher_model_20240318-081059.pth')
 
         for i in range(1, total_train_epoch):
             if if_pair:
@@ -593,7 +593,8 @@ class Runner:
             PAIR_agents.protagonist.writer.add_scalar('PAIR/protagonist_rewards', protagonist_mean_rewards, i)
             PAIR_agents.protagonist.writer.add_scalar('PAIR/antagonist_rewards', antagonist_mean_rewards, i)
             # print(f"{i}: protagonist_rewards = {protagonist_rewards}; antagonist_rewards = {antagonist_rewards}")
-            print(f"{i} training ended current time = {time.time()}")
+            curr_time_str = time.strftime("%Y%m%d-%H%M%S")
+            print(f"{i} training ended current time = {curr_time_str}")
             if if_pair:
                 if i == warm_up:
                     print(f"warm up done, {protagonist_mean_rewards}, {antagonist_mean_rewards}")
