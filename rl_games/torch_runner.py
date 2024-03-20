@@ -598,7 +598,7 @@ class Runner:
             agent_artifact = wandb.Artifact('agent', type='model')
 
             agent_artifact.add_file(PAIR_agents.protagonist.check_point_pth, name=f'agent_{curr_time_str}.pth')
-            wandb.log(agent_artifact)
+            wandb.log_artifact(agent_artifact)
             if if_pair:
                 if i == warm_up:
                     print(f"warm up done, {protagonist_mean_rewards}, {antagonist_mean_rewards}")
@@ -613,7 +613,7 @@ class Runner:
                     teacher_artifact = wandb.Artifact('teacher', type='model')
 
                     teacher_artifact.add_file(f'{adversarial_trainer.agent.algo.actor_critic.check_point_pth}', name=f'teacher_{curr_time_str}.pth')
-                    wandb.log(teacher_artifact)
+                    wandb.log_artifact(teacher_artifact)
                     # PAIR_agents.env.random_cy
                     # PAIR_agents.env.random_all_map('')
                     # PAIR_agents.env.env.reset_jackal()
